@@ -3,6 +3,8 @@
 
 このプロジェクトは、Androidアプリでの**ローカル通知**の実装方法を示しています。  
 `AlarmManager` と `BroadcastReceiver` を使用し、Jetpack Compose で構築されたユーザーインターフェースを提供します。
+リモート通知にも対応しております。https://gist.github.com/machikawa/7fae559ab36b450e70e098071eb652b1 のCloudFunctionsを利用すると
+アプリ内からトークンをサーバーに保存したり、リモート通知を受け付けることができます
 
 ---
 
@@ -37,3 +39,5 @@
 | `MainActivity.kt`            | アプリのエントリーポイント。通知チャネルの作成やUIの描画を担当。 |
 | `NotificationSchedulerUI.kt` | 通知スケジュールや即時通知を行うUIを提供。                 |
 | `NotificationReceiver.kt`    | アラームトリガーを受け取り、通知を実際に表示。              |
+| `MyFirebaseMessagingService.kt`    | リモート通知対応のファイル★😂必見！         |
+
