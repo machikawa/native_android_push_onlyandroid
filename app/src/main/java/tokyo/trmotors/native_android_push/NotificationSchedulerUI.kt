@@ -173,6 +173,7 @@ fun NotificationSchedulerUI(context: Context) {
                     Text(text = "+1 Minute")
                 }
 
+                // ボタン群
                 Button(onClick = {
                     val now = Calendar.getInstance()
                     if (selectedTime.before(now)) {
