@@ -27,7 +27,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import tokyo.trmotors.native_android_push.ui.theme.Native_android_pushTheme
 import android.app.AlarmManager
+import android.app.DownloadManager
+import androidx.privacysandbox.tools.core.model.Method
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.google.firebase.messaging.FirebaseMessaging
+import org.json.JSONObject
 
 
 class MainActivity : ComponentActivity() {
@@ -53,7 +59,7 @@ class MainActivity : ComponentActivity() {
             if (task.isSuccessful) {
                 val token = task.result
                 Log.d("FCM😂😂😂", "FCM Token: $token")
-                // 必要であればトークンをサーバーに送信
+                // 必要であればトークンをサーバーに送信 - ただしBrazeプランを有効にするまで使えないため、封印
                 // sendTokenToServer(token)
             } else {
                 Log.w("FCM", "Fetching FCM registration token failed", task.exception)
@@ -67,6 +73,31 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    // token を Functions に送信
+    private fun sendTokenToServer(token: String) {
+        val url = "https://<YOUR_REGION>-<YOUR_PROJECT_ID>.cloudfunctions.net/saveToken"
+
+        val requestQueue = Volley.newRequestQueue(this) // this が Context
+        val jsonObject = JSONObject()
+        jsonObject.put("token", token)
+
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST, // Volley の Method を使用
+            url,
+            jsonObject,
+            { response ->
+                Log.d("TokenSave", "Response: $response")
+            },
+            { error ->
+                Log.e("TokenSave", "Error: ${error.message}")
+                // 必要に応じてエラーハンドリングを強化
+            }
+        )
+
+        requestQueue.add(jsonObjectRequest)
+    }
+
 
     // Android 13以上の場合に通知権限を確認し、必要ならユーザーにリクエストを送る
     private fun checkNotificationPermission() {
