@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import tokyo.trmotors.native_android_push.ui.theme.Native_android_pushTheme
 import android.app.AlarmManager
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class MainActivity : ComponentActivity() {
@@ -46,6 +47,19 @@ class MainActivity : ComponentActivity() {
 
         // 通知の送信 : 初期で作成
 //        sendNotification(this)
+
+        // Firebase FCM トークンの取得 --- Remote notification対応
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                Log.d("FCM😂😂😂", "FCM Token: $token")
+                // 必要であればトークンをサーバーに送信
+                // sendTokenToServer(token)
+            } else {
+                Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+            }
+        }
+
 
         setContent {
             Native_android_pushTheme {
